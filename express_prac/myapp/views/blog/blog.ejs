@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Blog 실습</h1>
+    <br /><br />
+    <!-- localhost:3000/blog/write -->
+    <a href="/blog/write">글쓰기</a>
+
+    <!-- 글의 제목이 뜨고 제목을 클릭하면 본문 내용으로 이동. -->
+    <h3>글 내용들</h3>
+    <ul>
+    <!-- 여러 값이 존재 -->
+    <% for(let i=0; i<content.length; i++) { %>
+      <li><a href="/blog/read/<%=content[i].no %>"><%=content[i].title %></a></li>
+    <% } %>
+    </ul>
+  </body>
+</html>

@@ -3,11 +3,13 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const callRouter = require("./routes/call");
 const postRouter = require("./routes/post");
+const blogRouter = require("./routes/blog");
 //mongoDB
 const dbconnect = require("./models/index");
 dbconnect();
@@ -24,11 +26,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+//cors 처리
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
+
 //주소를 찾는 것이 Routing. Router의 역할
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/call", callRouter);
 app.use("/post", postRouter);
+app.use("/blog", blogRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

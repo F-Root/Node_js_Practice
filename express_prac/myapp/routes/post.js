@@ -1,5 +1,7 @@
 const express = require("express");
-const BookSchema = require("../models/book");
+const BookSchema = require("../models/book"); //컨트롤러를 작성했으면 지워도 무방하다.
+const bookController = require("../controller/post");
+const UserSchema = require("../models/user");
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
@@ -10,25 +12,28 @@ router.get("/del", (req, res) => {
   res.render("delete");
 });
 
-router.get("/bookinfo/:id", (req, res) => {
-  const author = req.params.id;
+// controller 이용X
+// router.get("/bookinfo/:id", (req, res) => {
+//   const author = req.params.id;
 
-  //   BookSchema.findOne({ author }, (err, result) => {
-  //     if (result) {
-  //       return res.json(result);
-  //     } else {
-  //       return res.send("등록된 작가가 없습니다.");
-  //     }
-  //   });
+//   //   BookSchema.findOne({ author }, (err, result) => {
+//   //     if (result) {
+//   //       return res.json(result);
+//   //     } else {
+//   //       return res.send("등록된 작가가 없습니다.");
+//   //     }
+//   //   });
 
-  BookSchema.findOne({ author })
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+//   BookSchema.findOne({ author })
+//     .then((result) => {
+//       res.json(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+// controller 이용O
+router.get("/bookinfo/:id", bookController.getbookinfo);
 
 router.post("/", (req, res, next) => {
   //   const name = req.body.name;
@@ -54,20 +59,23 @@ router.post("/", (req, res, next) => {
 //   res.redirect("/post");
 // });
 
-router.post("/addbook", (req, res) => {
-  const { bookname, author, price, date } = req.body;
-  const priceCheck = price || 5000;
+// controller 이용X
+// router.post("/addbook", (req, res) => {
+//   const { bookname, author, price, date } = req.body;
+//   const priceCheck = price || 5000;
 
-  let bookData = new BookSchema({
-    bookname,
-    author,
-    price: priceCheck,
-    publish: date,
-  });
+//   let bookData = new BookSchema({
+//     bookname,
+//     author,
+//     price: priceCheck,
+//     publish: date,
+//   });
 
-  bookData.save();
-  res.redirect("/post");
-});
+//   bookData.save();
+//   res.redirect("/post");
+// });
+// controller 이용O
+router.post("/addbook", bookController.addbook);
 
 router.delete("/del/:id", (req, res) => {
   const bookname = req.params.id;
@@ -92,6 +100,37 @@ router.post("/del/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+//bookinfo에 있는 정보를 다 가져오는 코드
+router.get("/getlist", async (req, res) => {
+  // const result = BookSchema.find({}, (req, res) => {}); //의 형식을 아래처럼 변경.
+  const result = await BookSchema.find({}).exec(); //exec()라는 실행코드를 꼭 붙여야함.
+
+  return res.status(200).json(result);
+});
+
+//error handling
+router.get("/users", async (req, res, next) => {
+  try {
+    // const userid = req.body.userid;
+    // const job = req.body.job;
+    const { userid, job } = req.body;
+    const user = new UserSchema({
+      userid: userid,
+      job: job,
+    });
+    const result = await user.save();
+    res.status(200).json({
+      result,
+      message: "user saved",
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+
+  res.render("user");
 });
 
 module.exports = router;
