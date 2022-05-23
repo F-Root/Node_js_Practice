@@ -1,4 +1,5 @@
 node_modules/
 ./myapp/node_modules/
 dbconfig.json
+./myapp/dbconfig.json
 memo.txt
