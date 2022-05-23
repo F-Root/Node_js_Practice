@@ -86,6 +86,7 @@ router.post("/del/:id", (req, res) => {
 
   BookSchema.findOneAndDelete({ bookname })
     .then((result) => {
+      console.log(result);
       res.json({ redirect: "/post" });
     })
     .catch((err) => {
