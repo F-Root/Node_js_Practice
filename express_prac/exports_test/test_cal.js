@@ -47,6 +47,13 @@ console.log(module.exports === exports);
 // };
 module.exports = { add, sub, mul, div };
 exports = { rem };
+
+// 1개만 보낼 때 이렇게 사용.
+// module.exports = add;
+// 여러개 보낼 때 이렇게 사용.
+// exports.add = add;
+// exports.sub = sub;
+
 // 각자 객체 공간 내에서 데이터가 추가되는게 아니라 새로운 객체가 할당되어
 // 콘솔을 찍어봐도 다른 값이 되었다는 것을 알 수 있다.
 // 그리고 exports는 module.exports의 경로를 참조하는 변수였기 때문에
